@@ -1,22 +1,29 @@
-import './App.css';
+import * as React from 'react';
+import { ThemeProvider } from '@mui/material/styles';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Box, CssBaseline } from '@mui/material';
+import { AppBarDrawer } from './components/AppBarDrawer';
+import { Task } from './pages/Task';
+import { Post } from './pages/Post';
+import { User } from './pages/User';
+import { theme } from './components/theme';
+import '@fontsource/inter';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <AppBarDrawer />
+        <Router>
+          <Routes>
+            <Route path="/" element={<Task />} />
+            <Route path="/user" element={<User />} />
+            <Route path="/post" element={<Post />} />
+          </Routes>
+        </Router>
+      </Box>
+    </ThemeProvider>
   );
 }
 
