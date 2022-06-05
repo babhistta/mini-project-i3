@@ -17,6 +17,7 @@ import {
   ListItemText,
   ListItemIcon,
   ListItemButton,
+  Link,
 } from '@mui/material';
 import {
   FaBars,
@@ -29,36 +30,28 @@ import {
 } from 'react-icons/fa';
 import MuiAppBar from '@mui/material/AppBar';
 
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-  '& .MuiDrawer-paper': {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    overflow: 'auto',
-    width: drawerWidth,
-    height: '100vh',
-    backgroundColor: '#000751',
-    color: '#fff',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    boxSizing: 'border-box',
-    ...(!open && {
-      overflowX: 'hidden',
-      transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up('sm')]: {
-        width: theme.spacing(9),
-      },
-    }),
-  },
-}));
 const drawerWidth = 240;
+
+const openedMixin = (theme) => ({
+  width: drawerWidth,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+});
+
+const closedMixin = (theme) => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -78,23 +71,41 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-export const AppBarDrawer = (props) => {
-  const { history } = props;
+const Drawer = styled(
+  MuiDrawer,
+  {}
+)(({ theme, open }) => ({
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: 'nowrap',
+  boxSizing: 'border-box',
+
+  ...(open && {
+    ...openedMixin(theme),
+    '& .MuiDrawer-paper': openedMixin(theme),
+  }),
+  ...(!open && {
+    ...closedMixin(theme),
+    '& .MuiDrawer-paper': closedMixin(theme),
+  }),
+}));
+
+function AppBarDrawer() {
   const itemList = [
     {
       text: 'Task',
       icon: <FaTasks />,
-      link: () => history.push('/'),
+      link: '/',
     },
     {
       text: 'Post',
       icon: <FaNewspaper />,
-      link: () => history.push('/post'),
+      link: '/post',
     },
     {
       text: 'User',
       icon: <FaUser />,
-      link: () => history.push('/user'),
+      link: '/user',
     },
   ];
   const [open, setOpen] = React.useState(true);
@@ -108,12 +119,11 @@ export const AppBarDrawer = (props) => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
+  // const container =
+  //   window !== undefined ? () => window().document.body : undefined;
   return (
     <div>
       <AppBar
-        position="fixed"
         color="black"
         open={open}
         style={styles.shadowBasic}
@@ -194,7 +204,16 @@ export const AppBarDrawer = (props) => {
           </Box>
         </Toolbar>
       </AppBar>
-      <Drawer open={open} variant="permanent" container={container}>
+      <Drawer
+        open={open}
+        variant="permanent"
+        PaperProps={{
+          sx: {
+            backgroundColor: '#000751',
+            color: '#fff',
+          },
+        }}
+      >
         <Toolbar
           color="black"
           sx={{
@@ -205,7 +224,7 @@ export const AppBarDrawer = (props) => {
           }}
         >
           <Box display="flex" sx={{ ml: 2 }}>
-            <img src="/img/logo.svg" />
+            <input type="image" img src={'/img/logo.svg'} alt="logo" />
             <Typography display="flex" fontWeight="700" sx={{ ml: 2 }}>
               Todost
             </Typography>
@@ -219,25 +238,28 @@ export const AppBarDrawer = (props) => {
           {itemList.map((item, index) => {
             const { text, icon, link } = item;
             return (
-              <ListItemButton onClick={link}>
-                <ListItemIcon>
-                  <Box
-                    sx={{
-                      '@media (min-width:640px)': {
-                        ml: '12px',
-                      },
-                      color: '#fff',
-                    }}
-                  >
-                    {icon}
-                  </Box>
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
+              <Link href={link} color="inherit" underline="none">
+                <ListItemButton>
+                  <ListItemIcon>
+                    <Box
+                      sx={{
+                        '@media (min-width:640px)': {
+                          ml: '12px',
+                        },
+                        color: '#fff',
+                      }}
+                    >
+                      {icon}
+                    </Box>
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItemButton>
+              </Link>
             );
           })}
         </List>
       </Drawer>
     </div>
   );
-};
+}
+export default AppBarDrawer;

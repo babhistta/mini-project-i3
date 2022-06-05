@@ -1,3 +1,4 @@
+import { withTheme } from '@emotion/react';
 import { createTheme } from '@mui/material/styles';
 
 export const styles = createTheme({
@@ -12,6 +13,7 @@ export const styles = createTheme({
     display: 'flex',
     flexDirection: 'column',
     borderRadius: '12px',
+    marginBottom: '1.5em',
   },
   cardTask: {
     boxShadow: 'none',
@@ -44,5 +46,20 @@ export const styles = createTheme({
   },
   paperBg: {
     background: '#111',
+  },
+  modal: {
+    position: 'absolute',
+    top: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    borderRadius: 3,
+    boxShadow:
+      '0px 0px 14px rgba(0, 0, 0, 0.02), 0px 4px 8px rgba(0, 0, 0, 0.06)',
+    p: 7,
   },
 });

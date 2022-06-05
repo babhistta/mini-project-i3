@@ -1,29 +1,45 @@
 import * as React from 'react';
 import {
   IconButton,
-  Divider,
   Typography,
   Toolbar,
   Box,
-  Avatar,
   Container,
   Grid,
   Paper,
   Button,
   Chip,
+  Modal,
+  Stack,
+  CircularProgress,
 } from '@mui/material';
-import {
-  FaPlus,
-  FaCalendar,
-  FaClock,
-  FaCheck,
-  FaTrash,
-  FaEdit,
-  FaReply,
-} from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa';
+import { MdAddTask } from 'react-icons/md';
+import TextField from '@mui/material/TextField';
+import { DateTimePicker, LocalizationProvider } from '@mui/lab';
+import DateFnsAdapter from '@date-io/date-fns';
 import { styles } from '../components/styles';
+import TaskCardPending from '../components/TaskCardPending';
+import TaskCardCompleted from '../components/TaskCardCompleted';
+import axios from '../api/axios';
 
-export const Task = () => {
+const Task = () => {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const date = new Date();
+  const [value, setValue] = React.useState(
+    new Date(date.toLocaleDateString('en-CA'))
+  );
+  const [todos, setTodos] = React.useState();
+  React.useEffect(() => {
+    axios.get(`https://gorest.co.in/public/v1/todos`).then((res) => {
+      const responseTasks = res.data.data;
+      setTodos(responseTasks);
+    });
+  }, []);
+
   return (
     <Box
       component="main"
@@ -40,9 +56,10 @@ export const Task = () => {
               Task Board
             </Typography>
             <Button
+              onClick={handleOpen}
               variant="contained"
               color="info"
-              startIcon={<FaPlus size={10} />}
+              startIcon={<MdAddTask size={20} />}
               style={styles.customButton}
             >
               Add Task
@@ -68,60 +85,25 @@ export const Task = () => {
                   <FaPlus size="15" />
                 </IconButton>
               </Box>
-              <Paper style={styles.cardTask}>
-                Vesica vulpes caput consequuntur antea velum peior.
-                <Box
-                  mt="16px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  flexWrap="wrap"
-                >
-                  <Button
-                    variant="contained"
-                    color="info"
-                    disableElevation
-                    style={styles.customButton}
-                  >
-                    <Box display="flex" alignItems="center">
-                      <Box mr={1}>
-                        <FaCalendar size={10} />
-                      </Box>
-                      <Typography variant="caption">12 Des 2021</Typography>
-                      <Box mr={1} ml={2}>
-                        <FaClock size={10} />
-                      </Box>
-                      <Typography variant="caption">05:00</Typography>
-                    </Box>
-                  </Button>
-                  <Box>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      disableElevation
-                      style={styles.circleIconButton}
-                    >
-                      <FaEdit size={14} />
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      disableElevation
-                      style={styles.circleIconButton}
-                    >
-                      <FaTrash size={14} />
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="info"
-                      disableElevation
-                      style={styles.circleIconButton}
-                    >
-                      <FaCheck size={14} />
-                    </Button>
-                  </Box>
-                </Box>
-              </Paper>
+              {todos ? (
+                <div>
+                  {todos.slice(0, 10).map((todo) => {
+                    if (todo.status === 'pending') {
+                      return (
+                        <TaskCardPending
+                          key={todo.id}
+                          due_on={todo.due_on}
+                          title={todo.title}
+                        />
+                      );
+                    }
+
+                    return <></>;
+                  })}
+                </div>
+              ) : (
+                <CircularProgress />
+              )}
             </Paper>
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
@@ -141,124 +123,77 @@ export const Task = () => {
                   />
                 </Typography>
               </Box>
-              <Paper style={styles.cardTask}>
-                Vesica vulpes caput consequuntur antea velum peior.
-                <Box
-                  mt="16px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="space-between"
-                >
-                  <Button
-                    variant="contained"
-                    color="success"
-                    disableElevation
-                    style={styles.customButton}
-                  >
-                    <Box display="flex" alignItems="center">
-                      <Box mr={1}>
-                        <FaCalendar size={10} />
-                      </Box>
-                      <Typography variant="caption">12 Des 2021</Typography>
-                      <Box mr={1} ml={2}>
-                        <FaClock size={10} />
-                      </Box>
-                      <Typography variant="caption">05:00</Typography>
-                    </Box>
-                  </Button>
-                  <Box>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      disableElevation
-                      style={styles.circleIconButton}
-                    >
-                      <FaTrash size={14} />
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="info"
-                      disableElevation
-                      style={styles.circleIconButton}
-                    >
-                      <FaCheck size={14} />
-                    </Button>
-                  </Box>
-                </Box>
-              </Paper>
-            </Paper>
-          </Grid>
-          <Grid item xs={12}>
-            <Paper style={styles.cardTaskParent}>
-              <Box display="flex" alignItems="center">
-                <Avatar
-                  sx={{ width: 28, height: 28, marginRight: 1 }}
-                  src="/img/avatar-female.png"
-                />
-                <Typography
-                  variant="body2"
-                  fontWeight="medium"
-                  color="initial"
-                  sx={{ marginRight: 1 }}
-                >
-                  Username
-                </Typography>
-                <Chip label="10 comments" size="small" />
-              </Box>
-              <Typography
-                variant="h6"
-                fontWeight="700"
-                color="initial"
-                sx={{ marginTop: 2 }}
-              >
-                Damnatio sonitus vestigium virtus curvus acceptus culpa cumque
-                adhuc.
-              </Typography>
-              <Typography
-                variant="body1"
-                fontWeight="400"
-                color="initial"
-                sx={{ marginTop: 1 }}
-              >
-                Tergo et abundans. Vita infit animadverto. Culpa deripio color.
-                Vel vestigium cura. Aut coepi sto. Caste avoco celebrer.
-                Vinculum ut utrimque. Conspergo sordeo tumultus. Rerum aqua
-                aeternus. Demum abduco vinum. Corpus necessitatibus amissio.
-                Tamen tripudio caelum. Architecto ver velum. Sol tyrannus
-                vilitas. Trepide laboriosam pariatur. Animi defaeco collum. Quo
-                debitis bardus.
-              </Typography>
-              <Button
-                variant="text"
-                color="info"
-                startIcon={<FaReply size={10} />}
-                sx={{
-                  marginTop: 1,
-                  fontWeight: '700',
-                  justifyContent: 'flex-start',
-                }}
-              >
-                Reply
-              </Button>
-              <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-              <Box ml={6} display="flex" alignItems="center">
-                <Avatar src="/img/avatar-male.png"></Avatar>
-                <Box ml={2}>
-                  <Typography variant="body1" fontWeight="700">
-                    Username
-                  </Typography>
-                  <Typography variant="body1" fontWeight="400">
-                    Tergo et abundans. Vita infit animadverto. Culpa deripio
-                    color. Vel vestigium cura. Aut coepi sto. Caste avoco
-                    celebrer. Vinculum ut utrimque. Conspergo sordeo tumultus.
-                    Rerum aqua aeternus. Demum abduco vinum.
-                  </Typography>
-                </Box>
-              </Box>
+              {todos ? (
+                <div>
+                  {todos.slice(0, 10).map((todo) => {
+                    if (todo.status === 'completed') {
+                      return (
+                        <TaskCardCompleted
+                          key={todo.id}
+                          due_on={todo.due_on}
+                          title={todo.title}
+                        />
+                      );
+                    }
+                    return <></>;
+                  })}
+                </div>
+              ) : (
+                <CircularProgress />
+              )}
             </Paper>
           </Grid>
         </Grid>
       </Container>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={styles.modal}>
+          <Box>
+            <MdAddTask size={50} />
+          </Box>
+          <Typography id="modal-modal-title" variant="h5" fontWeight="600">
+            Add Task
+          </Typography>
+          <Stack spacing={3}>
+            <form>
+              <TextField
+                required
+                id="outlined-required"
+                label="Input Your Task"
+                sx={{ mt: 3 }}
+              />
+              <LocalizationProvider dateAdapter={DateFnsAdapter}>
+                <DateTimePicker
+                  label="Date&Time picker"
+                  value={value}
+                  renderInput={(params) => <TextField required {...params} />}
+                />
+              </LocalizationProvider>
+              <Button
+                onClick={handleClose}
+                variant="outlined"
+                color="error"
+                sx={{ width: '100%', mr: 1 }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                color="info"
+                type="submit"
+                startIcon={<FaPlus size={10} />}
+                sx={{ width: '100%', ml: 1 }}
+              >
+                Submit
+              </Button>
+            </form>
+          </Stack>
+        </Box>
+      </Modal>
     </Box>
   );
 };
