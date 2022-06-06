@@ -62,4 +62,32 @@ export const styles = createTheme({
       '0px 0px 14px rgba(0, 0, 0, 0.02), 0px 4px 8px rgba(0, 0, 0, 0.06)',
     p: 7,
   },
+
+  formLogin: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    width: 400,
+    bgcolor: '#fff',
+    borderRadius: 3,
+    boxShadow:
+      '0px 0px 14px rgba(0, 0, 0, 0.02), 0px 4px 8px rgba(0, 0, 0, 0.06)',
+    p: 7,
+  },
+  bgLogin: {
+    p: '0px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    height: '97vh',
+    bgcolor: '#EFEFF5',
+  },
+
+  popUpSetting: {
+    boxShadow:
+      '0px 0px 14px rgba(0, 0, 0, 0.02), 0px 4px 8px rgba(0, 0, 0, 0.06)',
+    p: 7,
+  },
 });

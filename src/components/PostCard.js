@@ -21,13 +21,18 @@ const PostCard = ({ id, title, body }) => {
   React.useEffect(() => {
     console.log(id);
     axios
-      .get(`https://gorest.co.in/public/v1/posts/${id}/comments`)
+      .get(`https://gorest.co.in/public/v1/posts/${id}/comments`, {
+        headers: {
+          Authorization: `Bearer aaa6bce8c4ef571ed7f9e3647d9178bf750ac31a448f66cc7fbbeb49318a53f1`,
+        },
+      })
       .then((res) => {
         const responseTasks = res.data.data;
         setComments(responseTasks);
         console.log(responseTasks);
       });
   }, [id]);
+
   return (
     <Paper style={styles.cardTaskParent}>
       <Box display="flex" alignItems="center">
@@ -86,7 +91,6 @@ const PostCard = ({ id, title, body }) => {
       ) : (
         <CircularProgress />
       )}
-      <CommentCard />
     </Paper>
   );
 };

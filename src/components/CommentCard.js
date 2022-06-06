@@ -3,7 +3,7 @@ import { Typography, Box, Avatar } from '@mui/material';
 
 const CommentCard = ({ id, name, body }) => {
   return (
-    <Box ml={6} display="flex" alignItems="center">
+    <Box ml={6} mb={2} display="flex" alignItems="center">
       <Avatar src="/img/avatar-male.png"></Avatar>
       <Box ml={2}>
         <Typography variant="body1" fontWeight="700">

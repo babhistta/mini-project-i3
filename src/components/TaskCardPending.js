@@ -61,6 +61,38 @@ const TaskCardPending = ({ id, status, due_on, title, updateForm }) => {
     setID(localStorage.getItem('ID'));
   }, []);
 
+  const update = () => {
+    axios
+      .put(
+        `https://gorest.co.in/public/v1/todos/${id}`,
+        {
+          status: 'completed',
+        },
+        {
+          headers: {
+            Authorization: `Bearer aaa6bce8c4ef571ed7f9e3647d9178bf750ac31a448f66cc7fbbeb49318a53f1`,
+          },
+        }
+      )
+      .then((res) => {
+        window.location.reload();
+        console.log(res);
+      });
+  };
+
+  const deleteTask = () => {
+    axios
+      .delete(`https://gorest.co.in/public/v1/todos/${id}`, {
+        headers: {
+          Authorization: `Bearer aaa6bce8c4ef571ed7f9e3647d9178bf750ac31a448f66cc7fbbeb49318a53f1`,
+        },
+      })
+      .then((res) => {
+        window.location.reload();
+        console.log(res);
+      });
+  };
+
   return (
     <Paper style={styles.cardTask}>
       {title}
@@ -89,7 +121,7 @@ const TaskCardPending = ({ id, status, due_on, title, updateForm }) => {
           </Box>
         </Button>
         <Box>
-          <Button
+          {/* <Button
             variant="contained"
             color="secondary"
             onClick={updateForm}
@@ -97,11 +129,12 @@ const TaskCardPending = ({ id, status, due_on, title, updateForm }) => {
             style={styles.circleIconButton}
           >
             <FaEdit size={14} />
-          </Button>
+          </Button> */}
           <Button
             variant="contained"
             color="error"
             disableElevation
+            onClick={deleteTask}
             style={styles.circleIconButton}
           >
             <FaTrash size={14} />
@@ -110,6 +143,7 @@ const TaskCardPending = ({ id, status, due_on, title, updateForm }) => {
             variant="outlined"
             color="info"
             disableElevation
+            onClick={update}
             style={styles.circleIconButton}
           >
             <FaCheck size={14} />

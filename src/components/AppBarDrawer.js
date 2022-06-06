@@ -119,8 +119,7 @@ function AppBarDrawer() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  // const container =
-  //   window !== undefined ? () => window().document.body : undefined;
+
   return (
     <div>
       <AppBar
@@ -170,8 +169,13 @@ function AppBarDrawer() {
             <Menu
               sx={{
                 mt: '56px',
-                boxShadow:
-                  '0px 0px 14px rgba(0, 0, 0, 0.02), 0px 4px 8px rgba(0, 0, 0, 0.06)',
+              }}
+              PaperProps={{
+                sx: {
+                  boxShadow:
+                    '0px 0px 14px rgba(0, 0, 0, 0.02), 0px 4px 8px rgba(0, 0, 0, 0.06)',
+                  borderRadius: '10px',
+                },
               }}
               anchorEl={anchorElUser}
               anchorOrigin={{

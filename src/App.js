@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Box, CssBaseline } from '@mui/material';
 import AppBarDrawer from './components/AppBarDrawer';
 import Task from './pages/Task';
-import { Login } from './pages/Login';
+import Login from './pages/Login';
 import { Post } from './pages/Post';
 import { User } from './pages/User';
 import { theme } from './components/theme';
