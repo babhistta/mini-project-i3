@@ -27,6 +27,7 @@ export const Post = () => {
   const handleClose = () => setOpen(false);
 
   const [posts, setPosts] = React.useState();
+  const [myPosts, setMyPosts] = React.useState();
 
   React.useEffect(() => {
     axios
@@ -38,6 +39,20 @@ export const Post = () => {
       .then((res) => {
         const responsePosts = res.data.data;
         setPosts(responsePosts);
+        console.log(res);
+      });
+  }, []);
+
+  React.useEffect(() => {
+    axios
+      .get(`https://gorest.co.in/public/v1/users/19/posts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        const responsePosts = res.data.data;
+        setMyPosts(responsePosts);
         console.log(res);
       });
   }, []);
@@ -85,7 +100,7 @@ export const Post = () => {
         <Grid container spacing={3}>
           <Grid item xs={12} style={styles.titlePage}>
             <Typography variant="h5" color="initial" fontWeight={600}>
-              News
+              My Posts
             </Typography>
             <Button
               onClick={handleOpen}
@@ -96,6 +111,33 @@ export const Post = () => {
             >
               Create Post
             </Button>
+          </Grid>
+          <Grid item xs={12}>
+            {myPosts ? (
+              <div>
+                {myPosts.slice(0, 10).map((myPosts) => {
+                  return (
+                    <PostCard
+                      id={myPosts.id}
+                      body={myPosts.body}
+                      title={myPosts.title}
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <CircularProgress />
+            )}
+          </Grid>
+        </Grid>
+      </Container>
+
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} style={styles.titlePage}>
+            <Typography variant="h5" color="initial" fontWeight={600}>
+              All User Posts
+            </Typography>
           </Grid>
           <Grid item xs={12}>
             {posts ? (
@@ -135,6 +177,7 @@ export const Post = () => {
                 name="title"
                 required
                 id="outlined-required"
+                onChange={handleChange}
                 label="Input Your Title"
                 sx={{ mt: 3 }}
               />

@@ -5,30 +5,11 @@ import {
   Toolbar,
   Grid,
   Container,
-  TextField,
-  Button,
   Checkbox,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { styles } from '../components/styles';
 import DataTable from 'react-data-table-component';
 import axios from '../api/axios';
-
-const FilterComponent = ({ filterText, onFilter, onClear }) => (
-  <>
-    <TextField
-      id="search"
-      type="text"
-      placeholder="Filter By Name"
-      aria-label="Search Input"
-      value={filterText}
-      onChange={onFilter}
-    />
-    <Button type="button" onClick={onClear} color="info" variant="contained">
-      X
-    </Button>
-  </>
-);
 
 export const User = () => {
   const columns = [

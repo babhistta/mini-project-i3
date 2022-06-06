@@ -31,7 +31,7 @@ const Task = () => {
   const token =
     'aaa6bce8c4ef571ed7f9e3647d9178bf750ac31a448f66cc7fbbeb49318a53f1';
 
-  const date = new Date();
+  // const date = new Date();
   const [value, setValue] = React.useState(new Date('2014-08-18T21:11:54'));
 
   const handleChangeTime = (newValue) => {
@@ -67,7 +67,7 @@ const Task = () => {
   }, []);
 
   const [createdTask, setCreateTask] = React.useState({
-    title: 'dwadawd',
+    title: '',
     due_on: '',
     status: 'pending',
     user_id: '19',
@@ -318,7 +318,11 @@ const Task = () => {
                   value={value}
                   onChange={handleChangeTime}
                   renderInput={(params) => (
-                    <TextField name="due_on" {...params} />
+                    <TextField
+                      onChange={handleChange}
+                      name="due_on"
+                      {...params}
+                    />
                   )}
                 />
               </LocalizationProvider>

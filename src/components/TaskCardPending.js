@@ -8,13 +8,12 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import { FaCalendar, FaClock, FaCheck, FaTrash, FaEdit } from 'react-icons/fa';
+import { FaCalendar, FaClock, FaCheck, FaTrash } from 'react-icons/fa';
 import { styles } from './styles';
 import { DateTimePicker, LocalizationProvider } from '@mui/lab';
 import DateFnsAdapter from '@date-io/date-fns';
 import { MdAddTask } from 'react-icons/md';
 import axios from '../api/axios';
-import { Navigate } from 'react-router-dom';
 
 function formatDate(string) {
   var options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -28,7 +27,7 @@ function formatTime(string) {
 
 const TaskCardPending = ({ id, status, due_on, title, updateForm }) => {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  // const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const [title2, setTitle] = React.useState();
@@ -42,24 +41,6 @@ const TaskCardPending = ({ id, status, due_on, title, updateForm }) => {
   const handleChange = (newValue) => {
     setValue(newValue);
   };
-
-  const [ID, setID] = React.useState(null);
-  const sendTaskToAPI = () => {
-    axios
-      .put(`https://gorest.co.in/public/v1/todos/${ID}`, {
-        title,
-        due_on,
-      })
-      .then(() => {
-        Navigate('/');
-      });
-  };
-
-  React.useEffect(() => {
-    setTitle(localStorage.getItem('title'));
-    setDueOn(localStorage.getItem('due_on'));
-    setID(localStorage.getItem('ID'));
-  }, []);
 
   const update = () => {
     axios
@@ -202,7 +183,6 @@ const TaskCardPending = ({ id, status, due_on, title, updateForm }) => {
                   color="info"
                   type="submit"
                   sx={{ width: '100%', ml: 1 }}
-                  onClick={sendTaskToAPI}
                 >
                   Submit
                 </Button>
