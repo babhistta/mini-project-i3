@@ -3,7 +3,7 @@ name: i3gis-scan
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   i3gis-job:
